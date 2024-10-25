@@ -1,27 +1,29 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
-	"tcc-project/src/model"
-	"tcc-project/src/service"
+	"tcc-project/src/models"
+	"tcc-project/src/services"
 
 	"github.com/gorilla/mux"
 )
 
+// TODO: This router ReadAllUser has bugs they need to be fix
+
 // ReadAllUsers ...
 func ReadAllUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := service.ReadAllUsers()
+	users, err := services.ReadAllUsers()
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusNoContent)
 		fmt.Fprint(w, err)
 		return
 	}
 
 	// TODO: find a place to this, I think it's out of place here
-	usersJSON, err := json.Marshal(users)
+	JSONUsers, err := json.Marshal(users)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
@@ -30,7 +32,7 @@ func ReadAllUsers(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(usersJSON)
+	w.Write(JSONUsers)
 }
 
 // ReadUserByID ...
@@ -38,13 +40,13 @@ func ReadUserByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	ID, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, err)
 		return
 	}
-	user, err := service.ReadUserByID(ID)
+	user, err := services.ReadUserByID(ID)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusNoContent)
 		fmt.Fprint(w, err)
 		return
 	}
@@ -62,7 +64,7 @@ func ReadUserByID(w http.ResponseWriter, r *http.Request) {
 
 // CreateUser ...
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user model.User
+	var user models.User
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -74,7 +76,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 		return
 	}
-	if err := service.CreateUser(user); err != nil {
+	if err := services.CreateUser(user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
 		return
@@ -84,21 +86,28 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 // UpdateUser ...
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	var user model.User
+	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, err)
 		return
 	}
 	vars := mux.Vars(r)
 	ID, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, err)
 		return
 	}
 	user.ID = ID
-	if err := service.UpdateUser(user); err != nil {
+
+	if err := user.ValidateFields(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, err)
+		return
+	}
+
+	if err := services.UpdateUser(user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
 		return
@@ -115,7 +124,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 		return
 	}
-	if err := service.DeleteUser(ID); err != nil {
+	if err := services.DeleteUser(ID); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
 		return

@@ -1,0 +1,55 @@
+DROP TABLE IF EXISTS user;
+
+CREATE TABLE IF NOT EXISTS "user" (
+	id SERIAL,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP,
+	deleted_at TIMESTAMP,
+	PRIMARY KEY (id),
+	UNIQUE (email)
+);
+
+DROP TABLE IF EXISTS course;
+
+CREATE TABLE IF NOT EXISTS course (
+	id SERIAL,
+	owner INT NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	description VARCHAR(255) NOT NULL,
+	access_type SMALLINT NOT NULL,
+	access_code VARCHAR(255),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP,
+	deleted_at TIMESTAMP,
+	PRIMARY KEY (id),
+	FOREIGN KEY (owner) references "user"(id),
+	UNIQUE ("owner", name)
+);
+
+DROP TABLE IF EXISTS unit;
+
+CREATE TABLE IF NOT EXISTS unit (
+	id SERIAL,
+	level SMALLINT NOT NULL,
+	"order" SMALLINT NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	description VARCHAR(50) NOT NULL,
+	course INT NOT NULL,
+	PRIMARY KEY(id),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP,
+	deleted_at TIMESTAMP,
+	FOREIGN KEY (course) REFERENCES course(id)
+);
+
+DROP TABLE IF EXISTS lesson;
+
+CREATE TABLE IF NOT EXISTS lesson (
+	id SERIAL,
+	unit INT NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY (unit) REFERENCES unit(id)
+);

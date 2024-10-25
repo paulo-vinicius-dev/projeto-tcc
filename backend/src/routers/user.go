@@ -1,7 +1,7 @@
-package router
+package routers
 
 import (
-	"tcc-project/src/controller"
+	"tcc-project/src/controllers"
 )
 
 // AppendUserRouters ...
@@ -9,34 +9,29 @@ func AppendUserRouters() {
 
 	Routers = append(Routers,
 		Router{
-			Domain:  "user",
 			Method:  "GET",
 			Path:    "/users",
-			Handler: controller.ReadAllUsers,
+			Handler: controllers.ReadAllUsers,
 		},
 		Router{
-			Domain:  "user",
 			Method:  "GET",
 			Path:    "/user/{id:[0-9]+}",
-			Handler: controller.ReadUserByID,
+			Handler: controllers.ReadUserByID,
 		},
 		Router{
-			Domain:  "user",
 			Method:  "POST",
 			Path:    "/user",
-			Handler: controller.CreateUser,
+			Handler: controllers.CreateUser,
 		},
 		Router{
-			Domain:  "user",
 			Method:  "PUT",
 			Path:    "/user/{id:[0-9]+}",
-			Handler: controller.UpdateUser,
+			Handler: controllers.UpdateUser,
 		},
 		Router{
-			Domain:  "user",
 			Method:  "DELETE",
 			Path:    "/user/{id:[0-9]+}",
-			Handler: controller.DeleteUser,
+			Handler: controllers.DeleteUser,
 		},
 	)
 }

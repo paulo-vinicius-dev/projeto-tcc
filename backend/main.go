@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tcc-project/src/router"
+	"tcc-project/src/routers"
 
 	"github.com/joho/godotenv"
 )
@@ -20,7 +20,7 @@ func main() {
 
 	port := os.Getenv("SERVER_PORT")
 
-	router.InitilizarRouters()
+	routers.InitilizarRouters()
 
 	fmt.Printf("Up and running in port %v\n", port)
 
