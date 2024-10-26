@@ -4,9 +4,7 @@ import (
 	"tcc-project/src/controllers"
 )
 
-// AppendUserRouters ...
-func AppendUserRouters() {
-
+func init() {
 	Routers = append(Routers,
 		Router{
 			Method:  "GET",

@@ -6,13 +6,13 @@ func init() {
 	Routers = append(Routers,
 		Router{
 			Method:  "GET",
-			Path:    "/courses",
-			Handler: controllers.ReadAllCourses,
+			Path:    "/units",
+			Handler: controllers.ReadAllUnits,
 		},
 		Router{
 			Method:  "GET",
-			Path:    "/course/{id:[0-9]+}",
-			Handler: controllers.ReadCourseByID,
+			Path:    "/unit/{id:[0-9]+}",
+			Handler: controllers.ReadUnitByID,
 		},
 	)
 }

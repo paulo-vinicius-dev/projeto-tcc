@@ -38,10 +38,10 @@ CREATE TABLE IF NOT EXISTS unit (
 	name VARCHAR(50) NOT NULL,
 	description VARCHAR(50) NOT NULL,
 	course INT NOT NULL,
-	PRIMARY KEY(id),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP,
 	deleted_at TIMESTAMP,
+	PRIMARY KEY(id),
 	FOREIGN KEY (course) REFERENCES course(id)
 );
 

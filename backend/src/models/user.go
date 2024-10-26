@@ -13,6 +13,13 @@ type User struct {
 	DeletedAt  string `json:"deleted_at,omitempty"`
 }
 
+// UserDTO ...
+type UserDTO struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 // ValidateFields ...
 func (u User) ValidateFields() error {
 	if u.Name == "" {

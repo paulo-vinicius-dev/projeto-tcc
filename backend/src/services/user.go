@@ -6,7 +6,7 @@ import (
 )
 
 // ReadAllUsers ...
-func ReadAllUsers() ([]models.User, error) {
+func ReadAllUsers() ([]models.UserDTO, error) {
 	users, err := repositories.ReadAllUsers()
 	if err != nil {
 		return users, err
@@ -15,7 +15,7 @@ func ReadAllUsers() ([]models.User, error) {
 }
 
 // ReadUserByID ...
-func ReadUserByID(ID int) (models.User, error) {
+func ReadUserByID(ID int) (models.UserDTO, error) {
 	user, err := repositories.ReadUserByID(ID)
 	if err != nil {
 		return user, err

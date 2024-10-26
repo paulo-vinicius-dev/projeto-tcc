@@ -8,11 +8,11 @@ import (
 )
 
 // ReadAllUsers ...
-func ReadAllUsers() ([]models.User, error) {
+func ReadAllUsers() ([]models.UserDTO, error) {
 	conn := database.Connection()
 	defer conn.Close(context.Background())
 
-	var users []models.User
+	var users []models.UserDTO
 
 	rows, err := conn.Query(context.Background(),
 		`SELECT id, name, email FROM "user" WHERE deleted_at IS NULL`,
@@ -23,7 +23,7 @@ func ReadAllUsers() ([]models.User, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var user models.User
+		var user models.UserDTO
 		if err := rows.Scan(&user.ID, &user.Name, &user.Email); err != nil {
 			return users, err
 		}
@@ -31,18 +31,18 @@ func ReadAllUsers() ([]models.User, error) {
 	}
 
 	if len(users) < 1 {
-		return users, errors.New("any users was found")
+		return users, errors.New("any user was found")
 	}
 
 	return users, nil
 }
 
 // ReadUserByID ...
-func ReadUserByID(ID int) (models.User, error) {
+func ReadUserByID(ID int) (models.UserDTO, error) {
 	conn := database.Connection()
 	defer conn.Close(context.Background())
 
-	var user models.User
+	var user models.UserDTO
 
 	row := conn.QueryRow(context.Background(),
 		`SELECT id, name, email FROM "user" WHERE deleted_at IS NULL AND id = $1`,

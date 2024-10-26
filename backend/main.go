@@ -14,13 +14,13 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
+
+	routers.InitilizarRouters()
 }
 
 func main() {
 
 	port := os.Getenv("SERVER_PORT")
-
-	routers.InitilizarRouters()
 
 	fmt.Printf("Up and running in port %v\n", port)
 

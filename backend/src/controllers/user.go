@@ -17,22 +17,14 @@ import (
 func ReadAllUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := services.ReadAllUsers()
 	if err != nil {
-		w.WriteHeader(http.StatusNoContent)
-		fmt.Fprint(w, err)
-		return
-	}
-
-	// TODO: find a place to this, I think it's out of place here
-	JSONUsers, err := json.Marshal(users)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, err)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(JSONUsers)
+	json.NewEncoder(w).Encode(users)
 }
 
 // ReadUserByID ...
@@ -44,22 +36,17 @@ func ReadUserByID(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 		return
 	}
+
 	user, err := services.ReadUserByID(ID)
 	if err != nil {
-		w.WriteHeader(http.StatusNoContent)
+		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, err)
 		return
 	}
 
-	userJSON, err := json.Marshal(user)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
-	}
-
 	w.Header().Set("Content-type", "aplication/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(userJSON)
+	json.NewEncoder(w).Encode(user)
 }
 
 // CreateUser ...

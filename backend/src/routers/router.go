@@ -20,9 +20,6 @@ var Routers []Router
 func InitilizarRouters() {
 	r := mux.NewRouter()
 
-	AppendUserRouters()
-	AppendCourseRouters()
-
 	for _, v := range Routers {
 		r.HandleFunc(v.Path, v.Handler).Methods(v.Method)
 	}

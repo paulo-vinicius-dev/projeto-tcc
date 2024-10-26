@@ -10,9 +10,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// ReadAllCourses ...
-func ReadAllCourses(w http.ResponseWriter, r *http.Request) {
-	courses, err := services.ReadAllCourses()
+// ReadAllUnits ...
+func ReadAllUnits(w http.ResponseWriter, r *http.Request) {
+	units, err := services.ReadAllUnits()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, err)
@@ -21,11 +21,11 @@ func ReadAllCourses(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(courses)
+	json.NewEncoder(w).Encode(units)
 }
 
-// ReadCourseByID ...
-func ReadCourseByID(w http.ResponseWriter, r *http.Request) {
+// ReadUnitByID ...
+func ReadUnitByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	ID, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -33,15 +33,13 @@ func ReadCourseByID(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 		return
 	}
-
-	course, err := services.ReadCourseByID(ID)
+	unit, err := services.ReadUnitByID(ID)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, err)
 		return
 	}
-
-	w.Header().Set("Content-type", "aplication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(course)
+	json.NewEncoder(w).Encode(unit)
 }
