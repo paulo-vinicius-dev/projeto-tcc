@@ -98,8 +98,8 @@ func DeleteUser(ID int) error {
 
 }
 
-// DeleteLogicUser ...
-func DeleteLogicUser(ID int) error {
+// SoftDeleteUser ...
+func SoftDeleteUser(ID int) error {
 	conn := database.Connection()
 	defer conn.Close(context.Background())
 	if _, err := conn.Exec(context.Background(),
@@ -128,4 +128,23 @@ func VerifyDuplicities(user models.User) error {
 	}
 
 	return nil
+}
+
+// GetIDAndPasswordByEmail ...
+func GetIDAndPasswordByEmail(email string) (int, string, error) {
+	conn := database.Connection()
+	defer conn.Close(context.Background())
+
+	row := conn.QueryRow(context.Background(),
+		`SELECT id, password FROM "user" WHERE deleted_at IS NULL AND email = $1`,
+		email,
+	)
+	var (
+		ID       int
+		password string
+	)
+	if err := row.Scan(&ID, &password); err != nil {
+		return 0, "", err
+	}
+	return ID, password, nil
 }

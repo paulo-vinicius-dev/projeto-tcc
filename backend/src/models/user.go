@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 // User ...
 type User struct {
@@ -42,4 +45,11 @@ func (u User) ValidateFields() error {
 		return errors.New("password cannot be bigger than 255 characters")
 	}
 	return nil
+}
+
+// FormatFields ....
+func (u *User) FormatFields() {
+	u.Name = strings.TrimSpace(u.Email)
+	u.Email = strings.ToLower(u.Email)
+	u.Password = strings.TrimSpace(u.Password)
 }

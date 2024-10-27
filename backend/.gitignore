@@ -1,1 +1,2 @@
 *.env
+genereate_secret_key.go
